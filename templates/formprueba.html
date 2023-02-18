@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+{% block content %}
+    {% from '_macros.html' import render_input %}
+    <form method="post" action="" name="form1" class="form-horizontal">
+        {{ render_input("txtUsuario", "Usuario") }}
+        {{ render_input("txtAPaterno", "Apellido Paterno") }}
+        {{ render_input("txtAMaterno", "Apellido Materno") }}
+        {{ render_input("txtEdad", "Edad", type="number") }}
+        {{ render_input("txtContrasennia", "Contraseñia", type="password") }}
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn btn-default btn-primary">
+                    <i class="icon-book icon-white"></i>
+                    &nbsp;&nbsp;Guardar Alumno
+                </button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
