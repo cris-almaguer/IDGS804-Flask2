@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap-responsive.min.css">
+    <style>
+        body {
+            padding-top: 60px;
+        }
+
+        .tr-head {
+            background: #b0b5ae;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <a href="" class="brand">
+                    UTL-IDGS804
+                </a>
+                <ul class="nav">
+                    <li class="active">
+                        <a href="/">
+                            <i class="icon-home icon-white"></i>
+                            Index
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/usuarios">
+                            <i class="icon-user icon-white"></i>
+                            Usuarios
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/alumnos">
+                            <i class="icon-pencil icon-white"></i>
+                            Alumnos
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container lead">
+        {% with messages = get_flashed_messages()  %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}
+
+        {% endblock %}
+    </div>
+    <script type="text/javascript" src="../static/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>

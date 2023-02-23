@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="col-xs-12">
+        {% from '_macros.html' import render_field %}
+        <form action="/traductor" method="post" novalidate>
+            {{ form.csrf_token }}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            {{ render_field(form.espanniol) }}
+            {{ render_field(form.ingles) }}
+            <input class="btn btn-default btn-primary" type="submit" value="Registrar">
+        </form>   
+    </div>
+    <div class="col-xs-12"> 
+        {% from '_macros.html' import render_field %}
+        <form action="/traductor" method="post" novalidate>
+            {{ form.csrf_token }}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input class="btn btn-default btn-primary" type="submit" value="Traducir">
+        </form>   
+    </div>
+{% endblock %}
