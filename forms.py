@@ -21,13 +21,16 @@ class UserForm(Form):
 
 
 class NumberForm(Form):
-        numero = StringField('numeros', validators=[DataR()], render_kw={"required": True, "type": "number", "min": "1", "class": "form-control mb-2"})
+    numero = StringField('numeros', validators=[DataR()], render_kw={"required": True, "type": "number", "min": "1", "class": "form-control mb-2"})
     
 class LangForm(Form):
-    espanniol = StringField('Español', [validators.DataRequired(message='El campo es requerido')])
-    ingles = StringField('Inglés', [validators.DataRequired(message='El campo es requerido')])
-    lenguaje = RadioField('Idioma', choices=[('es', 'Español'), ('en', 'Inglés')])
-    campo = StringField('Campo', [validators.DataRequired(message='El campo es requerido')])
+    espanniol = StringField('Español', [validators.DataRequired(message='Este campo es requerido')])
+    ingles = StringField('Inglés', [validators.DataRequired(message='Este campo es requerido')])
+
+class TradForm(Form):
+    espanniolSalida = StringField('Español')
+    inglesSalida = StringField('Inglés')
+    lenguaje = RadioField('Idioma', [validators.DataRequired(message='Este campo es requerido')], choices=[('es', 'Español'), ('en', 'Inglés')])
 
 class LoginForm(Form):
     username = StringField('Usuario', [validators.DataRequired(message="El campo usuario es requerido"),

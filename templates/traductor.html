@@ -1,21 +1,33 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="col-xs-12">
-        {% from '_macros.html' import render_field %}
-        <form action="/traductor" method="post" novalidate>
-            {{ form.csrf_token }}
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            {{ render_field(form.espanniol) }}
-            {{ render_field(form.ingles) }}
-            <input class="btn btn-default btn-primary" type="submit" value="Registrar">
-        </form>   
-    </div>
-    <div class="col-xs-12"> 
-        {% from '_macros.html' import render_field %}
-        <form action="/traductor" method="post" novalidate>
-            {{ form.csrf_token }}
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <input class="btn btn-default btn-primary" type="submit" value="Traducir">
-        </form>   
-    </div>
+{% from '_macros.html' import render_field %}
+<div class="col-xs-6">
+    <h4>Guardado de la traducción</h4>
+    <form action="/traductor" method="post" novalidate>
+        {{ form.csrf_token }}
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        {{ render_field(form.espanniol) }}
+        {{ render_field(form.ingles) }}
+        <input class="btn btn-default btn-primary" type="submit" value="Registrar">
+    </form>
+</div>
+<div class="col-xs-6">
+    <h4>Traducción</h4>
+    <form action="/traductor_resultado" method="post" novalidate>
+        {{ formSalida.csrf_token }}
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="radio">
+            {% for subfield in formSalida.lenguaje %}
+                {% if loop.index == 1 %}
+                    {{ subfield(checked="true") }}
+                    {{ render_field(formSalida.espanniolSalida, value=español|capitalize) }}                    
+                {% else %}
+                    {{ subfield() }}
+                    {{ render_field(formSalida.inglesSalida, value=ingles|capitalize) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+        <input class="btn btn-default btn-primary" type="submit" value="Traducir">
+    </form>
+</div>
 {% endblock %}
