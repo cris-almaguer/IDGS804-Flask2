@@ -1,0 +1,9 @@
+Calculo - 08/03/2023 18:08:11
+Valor: 1500
+Maximo: 1575.0
+Minimo: 1425.0
+Tolerancia: 5%
+Banda uno: Marrón
+Banda dos: Verde
+Banda tres: Rojo
+
