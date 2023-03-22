@@ -112,9 +112,14 @@ def buscar_traduccion(palabra, lenguaje):
                     return partes[0]
     return ''
 
-def calcular_resistencia(banda_uno, banda_dos, banda_tres, tolerancia): 
+def calcular_resistencia(banda_uno, banda_dos, banda_tres, tolerancia_str): 
     colores = {"Negro": 0, "Marrón": 1, "Rojo": 2, "Naranja": 3, "Amarillo": 4, "Verde": 5, "Azul": 6, "Violeta": 7, "Gris": 8, "Blanco": 9}   
     valor = (colores[banda_uno] * 10 + colores[banda_dos]) * (10 ** colores[banda_tres])
+
+    if tolerancia_str == 'Dorado':
+        tolerancia = 5.0
+    else:
+        tolerancia = 10.0
 
     maximo = valor * (1 + tolerancia / 100)
     minimo = valor * (1 - tolerancia / 100)
@@ -128,43 +133,50 @@ def calcular_resistencia(banda_uno, banda_dos, banda_tres, tolerancia):
     return {'valor': round(valor, 2), 'maximo': round(maximo, 2), 'minimo': round(minimo, 2), 'tolerancia': tolerancia_str, 'tolerancia_color': tolerancia_color,'banda_uno': banda_uno, 'banda_dos': banda_dos, 'banda_tres': banda_tres}
 
 def guardar_registros(lista_resultado):
-    cadena_texto = 'Calculo - ' + str(datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + '\n'
+    cadena_texto = ''
     with open('resistencias.txt', 'a', encoding='utf-8') as f:
-        for clave, valor in lista_resultado.items():
-            if clave != 'tolerancia_color':
-                cadena_texto += str(clave.capitalize().replace('_', ' ')) + ': ' + str(valor) + '\n'
-            if clave == 'banda_tres':
-                cadena_texto += '\n'
+        for item in range(0, len(lista_resultado)):
+            if item == 3:
+                cadena_texto += lista_resultado[item] + '\n'
+            else:
+                cadena_texto += lista_resultado[item] + ', '
         f.write(cadena_texto)
 
-def leer_archivo(archivo):
-    with open(archivo, 'r', encoding='utf-8') as f:
-        contenido = f.read()
-        lineas = contenido.split('\n\n')
-        datos = []
-        for linea in lineas:
-            if linea:
-                temp = linea.split('\n')
-                d = {}
-                for i in temp[1:]:
-                    llave, valor = i.split(': ')
-                    d[llave.lower().replace(' ', '_')] = valor
-                d['tolerancia_color'] = '#AB8000'
-                datos.append(d)
-        return datos
+def leer_archivo():
+    with open('resistencias.txt', encoding='utf-8') as archivo:
+        lineas = archivo.readlines()
+    resistencias = []
+    for linea in lineas:
+        valores = linea.strip().split(', ')
+        print(valores)
+        resistencia = {
+            'banda_uno': valores[0],
+            'banda_dos': valores[1],
+            'banda_tres': valores[2],
+            'tolerancia': valores[3]
+        }
+        resistencias.append(resistencia)
+    return resistencias
 
 @app.route("/resistencia", methods=['POST', 'GET'])
 def resistencia():
     reg_res = res(request.form)
     colores = { "Negro": "#000000", "Marrón": "#8B4513", "Rojo": "#FF0000", "Naranja": "#FFA500", "Amarillo": "#FFFF00", "Verde": "#008000", "Azul": "#0000FF", "Violeta": "#EE82EE", "Gris": "#808080", "Blanco": "#FFFFFF" }
     if request.method == 'POST' and reg_res.validate():
-        valores = request.form.to_dict()
-        lista_resultado = calcular_resistencia(valores['banda_uno'], valores['banda_dos'], valores['banda_tres'], float(valores['tolerancia']))
+        valores_request = request.form.to_dict()
+        valores_lista = list(valores_request.values())
+        lista_resultado = valores_lista[1:5]
         guardar_registros(lista_resultado=lista_resultado)
-        listado_registros = leer_archivo('resistencias.txt')
+        valores_lectura = leer_archivo()
+        listado_registros = []
+        for item in valores_lectura:
+            listado_registros.append(calcular_resistencia(item['banda_uno'], item['banda_dos'], item['banda_tres'], item['tolerancia']))   
         return render_template('resistencia.html', form = reg_res, resultado = listado_registros, colores=colores)
     else:
-        listado_registros = leer_archivo('resistencias.txt')
+        valores_lectura = leer_archivo()
+        listado_registros = []
+        for item in valores_lectura:
+            listado_registros.append(calcular_resistencia(item['banda_uno'], item['banda_dos'], item['banda_tres'], item['tolerancia']))
         return render_template('resistencia.html', form = reg_res, resultado = listado_registros, colores=colores)
 
 @app.route("/descargar", methods=['GET'])
@@ -182,4 +194,4 @@ def descargar_archivo():
 
 if __name__ == "__main__":
     csrf.init_app(app)
-    app.run(debug=True, port=8000)
+    app.run(debug=True, port=8001)

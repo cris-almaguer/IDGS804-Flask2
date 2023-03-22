@@ -43,4 +43,4 @@ class ResForm(Form):
     banda_uno = SelectField('Banda 1', [validators.DataRequired(message="El campo es requerido")], render_kw={"class": "form-select mb-2"}, choices=bandasOpciones)
     banda_dos = SelectField('Banda 2', [validators.DataRequired(message="El campo es requerido")], render_kw={"class": "form-select mb-2"}, choices=bandasOpciones)
     banda_tres = SelectField('Banda 3', [validators.DataRequired(message="El campo es requerido")], render_kw={"class": "form-select mb-2"}, choices=bandasOpciones)
-    tolerancia = RadioField('Tolerancia', [validators.DataRequired(message="El campo es requerido")], render_kw={"class": "mb-3"}, choices=list(zip([5, 10], ["Dorado 5%", "Plata 10%"])), widget=None)
+    tolerancia = RadioField('Tolerancia', [validators.DataRequired(message="El campo es requerido")], render_kw={"class": "mb-3"}, choices=["Dorado", "Plata"], widget=None)
